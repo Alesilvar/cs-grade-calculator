@@ -149,6 +149,84 @@ pytest tests/test_grade_calculator.py
 - ✅ Formato consistente (PEP 8)
 - ✅ Tests unitarios con nomenclatura clara (shouldReturnXWhenY)
 
+## Análisis con SonarQube
+
+### Configuración Rápida
+
+El proyecto incluye configuración lista para SonarQube:
+
+```bash
+# Opción 1: Usar script automatizado (recomendado)
+./run_sonar_analysis.sh
+
+# Opción 2: Ejecutar manualmente
+pytest                    # Genera coverage.xml
+sonar-scanner            # Ejecuta el análisis
+```
+
+### Métodos de Análisis
+
+#### 1. SonarQube Cloud (Recomendado para comenzar)
+
+```bash
+# 1. Crear cuenta en https://sonarcloud.io
+# 2. Crear nuevo proyecto y obtener token
+# 3. Ejecutar análisis
+
+pytest  # Generar cobertura
+
+sonar-scanner \
+  -Dsonar.organization=tu-organizacion \
+  -Dsonar.host.url=https://sonarcloud.io \
+  -Dsonar.login=tu-token-aqui
+```
+
+#### 2. SonarQube con Docker (Servidor local)
+
+```bash
+# Iniciar servidor SonarQube
+docker run -d --name sonarqube -p 9000:9000 sonarqube:latest
+
+# Esperar a que inicie (visitar http://localhost:9000)
+# Usuario por defecto: admin / admin
+
+# Generar cobertura
+pytest
+
+# Ejecutar análisis
+sonar-scanner \
+  -Dsonar.host.url=http://localhost:9000 \
+  -Dsonar.login=tu-token-generado
+```
+
+#### 3. Instalación local de SonarQube Scanner
+
+```bash
+# Descargar desde:
+# https://docs.sonarqube.org/latest/analysis/scan/sonarscanner/
+
+# Después de instalar:
+pytest
+sonar-scanner
+```
+
+### Archivos de Configuración
+
+- **sonar-project.properties**: Configuración del proyecto
+- **pytest.ini**: Genera coverage.xml automáticamente
+- **run_sonar_analysis.sh**: Script para análisis completo
+
+### Métricas Analizadas
+
+SonarQube evaluará:
+
+- 🐛 **Bugs**: Errores potenciales en el código
+- 🔐 **Vulnerabilidades**: Problemas de seguridad
+- 💨 **Code Smells**: Problemas de mantenibilidad
+- 📊 **Cobertura**: Porcentaje de código cubierto por tests
+- 🔄 **Duplicación**: Código duplicado
+- 📏 **Complejidad**: Complejidad ciclomática
+
 ## Licencia
 
 Este proyecto es parte del curso CS3081 de UTEC.
